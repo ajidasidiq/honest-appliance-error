@@ -25,6 +25,9 @@ def gate_check(text: str) -> None:
         sys.exit(f"gate failed: entry is {len(text)} characters (max 200)")
     if "\n" in text or "\r" in text:
         sys.exit("gate failed: entry must be a single line")
+    # Plain text only: reject control characters the gate cannot display.
+    if any(ord(c) < 32 or ord(c) == 127 for c in text):
+        sys.exit("gate failed: entry contains a control character")
     if len(text.encode("utf-8")) > 200:
         sys.exit("gate failed: entry exceeds 200 bytes")
 
